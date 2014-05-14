@@ -5,7 +5,7 @@ namespace :copy do
     desc 'copy old crawled Data to new Schema'
     task :copyData => :environment do
 
-        TimeTable.where(station_id: nil).each do |record|
+        TimeTable.where(station_id: nil).limit(10).each do |record|
             data = record.data
 
             data['stations'].each do |station|
