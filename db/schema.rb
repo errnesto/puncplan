@@ -11,10 +11,47 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140528145508) do
+ActiveRecord::Schema.define(version: 20140528155059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "calendar_dates", force: true do |t|
+    t.integer  "service_id"
+    t.string   "date"
+    t.integer  "exception_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "calendars", force: true do |t|
+    t.integer  "service_id"
+    t.boolean  "monday"
+    t.boolean  "tuesday"
+    t.boolean  "wednesday"
+    t.boolean  "thursday"
+    t.boolean  "friday"
+    t.boolean  "saturday"
+    t.boolean  "sunday"
+    t.string   "start_date"
+    t.string   "end_date"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "routes", force: true do |t|
+    t.integer  "route_id"
+    t.integer  "agency_id"
+    t.string   "route_short_name"
+    t.string   "route_long_name"
+    t.string   "route_desc"
+    t.integer  "route_type"
+    t.string   "route_url"
+    t.string   "route_color"
+    t.string   "route_text_color"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "stop_times", force: true do |t|
     t.integer  "trip_id"
@@ -38,6 +75,19 @@ ActiveRecord::Schema.define(version: 20140528145508) do
     t.string   "vehicle_type"
     t.string   "vehicle_number"
     t.string   "direction"
+  end
+
+  create_table "trips", force: true do |t|
+    t.integer  "route_id"
+    t.integer  "service_id"
+    t.integer  "trip_id"
+    t.string   "trip_headsign"
+    t.string   "trip_short_name"
+    t.integer  "direction_id"
+    t.integer  "block_id"
+    t.integer  "shape_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end
