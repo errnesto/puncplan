@@ -85,10 +85,12 @@ namespace :generateStatistic do
                 end
             end
 
-            average_delay /= number_of_checked_stops
+            if number_of_checked_stops > 0
+                average_delay /= number_of_checked_stops
 
-            #write to database
-            Statistic.create(date: date, average_delay: average_delay, vehicle_type: vehicle_type, vehicle_number: route.route_short_name)
+                #write to database
+                Statistic.create(date: date, average_delay: average_delay, vehicle_type: vehicle_type, vehicle_number: route.route_short_name)
+            end
         end
     end
 end
