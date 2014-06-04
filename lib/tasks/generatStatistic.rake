@@ -1,6 +1,4 @@
 # encoding: UTF-8
-require 'uri'
-require 'json'
 namespace :generateStatistic do
     desc ''
     task :generateData => :environment do
