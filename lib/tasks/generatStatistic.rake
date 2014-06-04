@@ -80,7 +80,7 @@ namespace :generateStatistic do
                         end
 
                         average_delay += actual_departure
-                        ++number_of_checked_stops
+                        number_of_checked_stops += 1
                     end
                 end
             end
