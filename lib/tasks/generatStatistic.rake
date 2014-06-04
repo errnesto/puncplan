@@ -17,9 +17,9 @@ namespace :generateStatistic do
                 vehicle_type = 'Tram'
             end
 
-        #     trips = Trip.where(route_id: route.route_id)
-        #     trips.each do |trip|
-        #         trip_average_delay = 0
+            trips = Trip.where(route_id: route.route_id)
+            trips.each do |trip|
+                trip_average_delay = 0
         #         has_service_today = true
 
         #         #handle exeptions to standart time table
@@ -89,7 +89,7 @@ namespace :generateStatistic do
 
         #     #write to database
         #     Statistic.create(date: date, average_delay: average_delay, vehicle_type: vehicle_type, vehicle_number: route.route_short_name)
-        # end
+        end
     end
 end
 
