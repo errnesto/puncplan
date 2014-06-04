@@ -7,8 +7,8 @@ namespace :generateStatistic do
 
         DELAY_RANGE = 10 
         date = Date.yesterday
-
-        Route.where(true).each do |route|
+        all_routes = Route.where(true)
+        all_routes.each do |route|
             average_delay = 0
             number_of_checked_stops = 0
 
