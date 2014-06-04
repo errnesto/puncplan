@@ -23,7 +23,7 @@ namespace :generateStatistic do
                 has_service_today = true
 
                 #handle exeptions to standart time table
-                calender = Calendar.where(service_id: trip.service_id).take!
+                calender = Calendar.where(service_id: trip.service_id).take
                 if calender.present? 
                     #has service this weekday
                     weekday = date.strftime('%A').downcase
@@ -32,7 +32,7 @@ namespace :generateStatistic do
 
                 #has been added for today
                 date_string = date.strftime('%Y%m%d')
-                calender_date = CalendarDate.find_by! service_id: trip.service_id, date: date_string
+                calender_date = CalendarDate.find_by service_id: trip.service_id, date: date_string
                 if calender_date.present? 
                     has_service_today = calender_date.exception_type == 1
                 end
