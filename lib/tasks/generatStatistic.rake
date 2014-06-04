@@ -20,25 +20,26 @@ namespace :generateStatistic do
             trips = Trip.where(route_id: route.route_id)
             trips.each do |trip|
                 trip_average_delay = 0
-        #         has_service_today = true
+                has_service_today = true
 
-        #         #handle exeptions to standart time table
-        #         calender = Calendar.where(service_id: trip.service_id).limit(1)
-        #         if calender.present? 
-        #             #has service this weekday
-        #             weekday = date.strftime('%A').downcase
-        #             has_service_today = calender[weekday] 
-        #         end
+                #handle exeptions to standart time table
+                calender = Calendar.where(service_id: trip.service_id).limit(1)
+                if calender.present? 
+                    #has service this weekday
+                    weekday = date.strftime('%A').downcase
+                    has_service_today = calender[weekday] 
+                end
 
-        #         #has been added for today
-        #         date_string = date.strftime('%Y%m%d')
-        #         calender_date = CalendarDate.where(service_id: trip.service_id, date: date_string).limit(1)
-        #         if calender_date.present? 
-        #             has_service_today = calender_date.exception_type == 1
-        #         end
+                #has been added for today
+                date_string = date.strftime('%Y%m%d')
+                calender_date = CalendarDate.where(service_id: trip.service_id, date: date_string).limit(1)
+                if calender_date.present? 
+                    has_service_today = calender_date.exception_type == 1
+                end
 
-        #         if has_service_today
-        #             stop_times = StopTime.where(trip_id: trip.trip_id)
+                if has_service_today
+                    stop_times = StopTime.where(trip_id: trip.trip_id)
+                end
 
         #             stop_times.each do |stop_time|
         #                 tempTime = stop_time.departure_time.split(':')
