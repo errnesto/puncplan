@@ -32,7 +32,7 @@ namespace :generateStatistic do
 
                 #has been added for today
                 date_string = date.strftime('%Y%m%d')
-                calender_date = CalendarDate.where(service_id: trip.service_id, date: date_string).take!
+                calender_date = CalendarDate.find_by! service_id: trip.service_id, date: date_string
                 if calender_date.present? 
                     has_service_today = calender_date.exception_type == 1
                 end
