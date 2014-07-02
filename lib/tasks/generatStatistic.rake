@@ -6,7 +6,7 @@ namespace :generateStatistic do
     task :generateData => :environment do
 
         DELAY_RANGE = 10 
-    	date = Date.yesterday
+    	date = Date.new(2014,5,1)
 
     	Route.find_each do |route|
     		average_delay = 0
@@ -17,16 +17,21 @@ namespace :generateStatistic do
     			vehicle_type = 'Bus'
     		when 900
     			vehicle_type = 'Tram'
+            else
+                vehicle_type = false
             end
 
-    		trips = Trip.where(route_id: route.route_id)
-    		trips.find_in_batches do |trip_batches|
-                trip_batches.each do |trip|
+            if vehicle_type
+                puts vehicle_type
+                puts route.route_short_name
+        		trips = Trip.where(route_id: route.route_id)
+        		trips.each do |trip|
         			trip_average_delay = 0
         			has_service_today = true
 
         			#handle exeptions to standart time table
         			calender = Calendar.where(service_id: trip.service_id).take
+
         			if calender.present? 
         				#has service this weekday
         				weekday = date.strftime('%A').downcase
@@ -40,28 +45,32 @@ namespace :generateStatistic do
                     	has_service_today = calender_date.exception_type == 1
                     end
 
+                    puts has_service_today
+
                     if has_service_today
+                        t1 = Time.now
                     	stop_times = StopTime.where(trip_id: trip.trip_id)
-                        if (stop_times.length == 0)
-                            trip.destroy
-                            puts 'destroyed:'
-                            puts trip.trip_id
-                        end
-                    	stop_times.find_in_batches do |stop_time_batches|
-                            stop_time_batches.each do |stop_time|
-                        		tempTime = stop_time.departure_time.split(':')
-                        		stop_departure_time = yesterday.change(:hour=> tempTime[0], :min=> tempTime[1])
+                        puts 'get from StopTime'
+                        puts (Time.now - t1) * 1000
+                    	stop_times.each do |stop_time|
+                    		tempTime = stop_time.departure_time.split(':')
+                    		stop_departure_time = date.change(:hour=> tempTime[0], :min=> tempTime[1])
 
-                        		lower_range = stop_departure_time - DELAY_RANGE.minutes
-                        		upper_range = stop_departure_time + DELAY_RANGE.minutes
+                    		lower_range = stop_departure_time - DELAY_RANGE.minutes
+                    		upper_range = stop_departure_time + DELAY_RANGE.minutes
 
-                        		tt_departures = TimeTable.where(
-                        			departure_time:     lower_range..upper_range, 
-                        			station_id:     stop_time.stop_id, 
-                        			direction:      trip.trip_headsign, 
-                        			vehicle_type:   vehicle_type, 
-                        			vehicle_number: route.route_short_name)
+                            t1 = Time.now
+                    		tt_departures = TimeTable.where(
+                    			departure_time:     lower_range..upper_range, 
+                    			station_id:     stop_time.stop_id, 
+                    			direction:      trip.trip_headsign, 
+                    			vehicle_type:   vehicle_type, 
+                    			vehicle_number: route.route_short_name)
 
+                            puts 'get from TimeTable'
+                            puts (Time.now - t1) * 1000
+
+                            if (tt_departures.length > 0)
                         		#get departues with shortest delay
                         		closest_departure = DELAY_RANGE
                         		nd_closest_departure = DELAY_RANGE
@@ -88,11 +97,11 @@ namespace :generateStatistic do
                         		end
 
                         		average_delay += actual_departure
-                        		++number_of_checked_stops
-                                puts '--'
-                                puts number_of_checked_stops
+                            else
+                                average_delay += DELAY_RANGE * 2 #no departure at all or a very big one
                             end
-                    	end
+                    		number_of_checked_stops = number_of_checked_stops + 1 
+                        end
                     end
                 end
             end
