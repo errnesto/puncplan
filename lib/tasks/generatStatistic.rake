@@ -1,6 +1,4 @@
 # encoding: UTF-8
-require 'uri'
-require 'json'
 namespace :generateStatistic do
     desc ''
     task :generateData => :environment do
@@ -116,7 +114,6 @@ namespace :generateStatistic do
                     end
                 end
             end
-
             if (number_of_checked_stops > 0)
                 average_delay /= number_of_checked_stops
                 #write to database

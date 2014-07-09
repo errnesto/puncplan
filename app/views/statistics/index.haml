@@ -1,0 +1,8 @@
+%h1 Hello Statistic
+
+= form_tag(action: "showStat",method: "GET", remote: true) do |f| 
+  = text_field_tag :starttime, nil, placeholder: "Start"
+  = text_field_tag :endtime, nil, placeholder: "end"
+
+
+%a{:href => '/showStat?starttime=20140501&endtime=20140502'}>Link
