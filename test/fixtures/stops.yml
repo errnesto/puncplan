@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  stop_id: 1
+  stop_code: 1
+  stop_name: 
+  stop_lat: 
+  stop_lon: 
+  zone_id: 1
+  stop_url: MyString
+  location_type: MyString
+  parent_station: 1
+
+two:
+  stop_id: 1
+  stop_code: 1
+  stop_name: 
+  stop_lat: 
+  stop_lon: 
+  zone_id: 1
+  stop_url: MyString
+  location_type: MyString
+  parent_station: 1

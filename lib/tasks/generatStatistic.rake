@@ -6,7 +6,12 @@ namespace :generateStatistic do
     task :generateData => :environment do
 
         DELAY_RANGE = 10 
-    	date = Date.new(2014,5,1)
+    	date = DateTime.new(2014,5,1)
+
+        #initialzie variables
+        vehicle_type = false
+        average_delay = 0
+        number_of_checked_stops = 0
 
     	Route.find_each do |route|
     		average_delay = 0
@@ -21,56 +26,59 @@ namespace :generateStatistic do
                 vehicle_type = false
             end
 
+
+
             if vehicle_type
-                puts vehicle_type
-                puts route.route_short_name
+                #puts vehicle_type
+                #puts route.route_short_name
         		trips = Trip.where(route_id: route.route_id)
         		trips.each do |trip|
         			trip_average_delay = 0
         			has_service_today = true
 
         			#handle exeptions to standart time table
-        			calender = Calendar.where(service_id: trip.service_id).take
+        			calender = Calendar.exists?(service_id: trip.service_id)
 
-        			if calender.present? 
-        				#has service this weekday
-        				weekday = date.strftime('%A').downcase
-        				has_service_today = calender[weekday] 
+        			if calender 
+        				#if there is a entry in calender its always false
+        				has_service_today = false 
+
+                        #there are only exeptions so we only need to check this 
+                        #if we have no service
+                        date_string = date.strftime('%Y%m%d')
+                        calender_date = CalendarDate.where(service_id: trip.service_id, date: date_string).take
+                        if calender_date.present? 
+                            has_service_today = calender_date.exception_type == 1
+                        end
         			end
 
-        			#has been added for today
-        			date_string = date.strftime('%Y%m%d')
-                    calender_date = CalendarDate.where(service_id: trip.service_id, date: date_string).take
-                    if calender_date.present? 
-                    	has_service_today = calender_date.exception_type == 1
-                    end
-
-                    puts has_service_today
-
                     if has_service_today
-                        t1 = Time.now
                     	stop_times = StopTime.where(trip_id: trip.trip_id)
-                        puts 'get from StopTime'
-                        puts (Time.now - t1) * 1000
+                        puts 'rote:'
+                        puts vehicle_type
+                        puts route.route_short_name
+                        puts trip.trip_headsign
+
                     	stop_times.each do |stop_time|
                     		tempTime = stop_time.departure_time.split(':')
-                    		stop_departure_time = date.change(:hour=> tempTime[0], :min=> tempTime[1])
+                    		stop_departure_time = date.change(hour: tempTime[0].to_i, min: tempTime[1].to_i)
 
                     		lower_range = stop_departure_time - DELAY_RANGE.minutes
                     		upper_range = stop_departure_time + DELAY_RANGE.minutes
 
-                            t1 = Time.now
+                            puts 'stop'
+                            puts number_of_checked_stops
+                            puts stop_time.stop_id
+                            puts stop_departure_time                            
+
                     		tt_departures = TimeTable.where(
                     			departure_time:     lower_range..upper_range, 
                     			station_id:     stop_time.stop_id, 
                     			direction:      trip.trip_headsign, 
                     			vehicle_type:   vehicle_type, 
                     			vehicle_number: route.route_short_name)
-
-                            puts 'get from TimeTable'
-                            puts (Time.now - t1) * 1000
-
-                            if (tt_departures.length > 0)
+ 
+                            unless tt_departures.empty?
                         		#get departues with shortest delay
                         		closest_departure = DELAY_RANGE
                         		nd_closest_departure = DELAY_RANGE
@@ -98,7 +106,7 @@ namespace :generateStatistic do
 
                         		average_delay += actual_departure
                             else
-                                average_delay += DELAY_RANGE * 2 #no departure at all or a very big one
+                                average_delay += DELAY_RANGE * 2 #no departure at all or a very big delay
                             end
                     		number_of_checked_stops = number_of_checked_stops + 1 
                         end
@@ -111,8 +119,7 @@ namespace :generateStatistic do
                 #write to database
                 Statistic.create(date: date, average_delay: average_delay, vehicle_type: vehicle_type, vehicle_number: route.route_short_name)
             end
+
         end
     end
 end
-
-
