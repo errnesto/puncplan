@@ -66,14 +66,17 @@ namespace :generateStatistic do
                     		lower_range = stop_departure_time - DELAY_RANGE.minutes
                     		upper_range = stop_departure_time + DELAY_RANGE.minutes
 
+                            stop = Stop.where(stop_id: stop_time.stop_id).take
+                            station_ids = stop.stop_code.split(',')
+
                             puts 'stop'
                             puts number_of_checked_stops
-                            puts stop_time.stop_id
+                            puts station_ids
                             puts stop_departure_time                            
 
                     		tt_departures = TimeTable.where(
-                    			departure_time:     lower_range..upper_range, 
-                    			station_id:     stop_time.stop_id, 
+                    			departure_time: lower_range..upper_range, 
+                    			station_id:     station_ids, 
                     			direction:      trip.trip_headsign, 
                     			vehicle_type:   vehicle_type, 
                     			vehicle_number: route.route_short_name)
