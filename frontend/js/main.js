@@ -4,6 +4,7 @@
 	// document ready
 	$(function() {
 		$('#request-link').click(function (e) {
+			$('#vis').html("");
 			e.preventDefault()
 
 			var startTime = $('#starttime').val();
@@ -29,7 +30,7 @@
 					table+= "</tr>";
 				}
 				table += "</table>";
-				$('body').append(table);
+				$('#vis').html(table);
 			});
 
 		});
