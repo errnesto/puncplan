@@ -16,8 +16,22 @@
 			}
 
 			$.getJSON(backendUrl,data,function (result) {
+				result.sort(function(a,b) { return parseFloat(a.avg) - parseFloat(b.avg) } );
+				result.reverse();
 				console.log(result);
+
+				var table = "<table>";
+				for(var i = 0; i<result.length;i++){
+					table+= "<tr>";
+					table+= "<td>" + result[i].vehicle_type + "</td>";
+					table+= "<td>" + result[i].vehicle_number + "</td>";
+					table+= "<td>" + Math.round(result[i].avg) + " min</td>";
+					table+= "</tr>";
+				}
+				table += "</table>";
+				$('body').append(table);
 			});
+
 		});
 	});
 
