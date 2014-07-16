@@ -3,12 +3,7 @@
 
 	// document ready
 	$(function() {
-		function getDataForLineAndPieChart(name){
-			var a = name.split(" ");
-			var data = {
-				type : a[0],
-				num : a[1]
-			};
+		function getDataForLineAndPieChart(data){
 			var newJsonFileUrl = './data/sample.json';
 			$.getJSON(newJsonFileUrl,function (result) {
 				var ctx = $("#lineChart").get(0).getContext("2d");
@@ -19,8 +14,6 @@
 				var pieElement = $("#pieChart").get(0).getContext("2d");
 				var pieData = transformDataForPieChart(result);
 				var pieOptions = getPieChartOptions();
-				console.log(pieData);
-				console.log(pieOptions);
 				var myPieChart = new Chart(pieElement).Pie(pieData,pieOptions);
 			}).fail(function(error){
 				console.log(error);
@@ -31,8 +24,7 @@
 			$.getJSON(backendUrl,data,function (result) {
 				result.sort(function(a,b) { return parseFloat(a.avg) - parseFloat(b.avg) } );
 				result.reverse();
-				// createTableFromResult(result);
-				// createDivsFromResult(result);
+				createDropdown(result);
 				var ctx = $("#barChart").get(0).getContext("2d");
 				var data = transformDataForBarChart(result);
 				var options = getOptionsForBarChart();
@@ -40,9 +32,61 @@
 				$('canvas').click(function(evt){
 				    var activeBars = myBarChart.getBarsAtEvent(evt);
 				    $('#barChart').fadeOut("slow", function(){
-				    	getDataForLineAndPieChart(activeBars[0].label);
+				    	var a = activeBars[0].label.split(" ");
+						var data = {
+							type : a[0],
+							num : a[1]
+						};
+				    	getDataForLineAndPieChart(data);
 				    });
 				});
+			});
+		}
+
+		function createDropdown(result){
+			var labelBus = "<label for='bus'>Busse</label>";
+			var labelTram = "<label for='tram'>Trams</label>";
+			var selectBus = $('<select/>',{id: "bus"});
+			var selectTram = $('<select/>',{id: "tram"});
+			for(var i=0;i<result.length;i++){
+				var o = $('<option/>', {
+					text: result[i].vehicle_number
+				});
+				if(result[i].vehicle_type == "Bus"){
+					selectBus.append(o);
+				}else{
+					selectTram.append(o);
+				}
+			}
+			$('#header').append(labelBus)
+						.append(selectBus)
+						.append(labelTram)
+						.append(selectTram);
+			
+			$('#tram').val(''); 
+
+			$('#bus')
+						.val('')
+						.change(function(){
+							var data = {
+								type : "Bus",
+								num : this.value
+							};
+							$('#barChart').fadeOut("slow", function(){
+								getDataForLineAndPieChart(data);
+							});
+			});
+
+			$('#tram')
+						.val('')
+						.change(function(){
+							var data = {
+								type : "Tram",
+								num : this.value
+							};
+							 $('#barChart').fadeOut("slow", function(){
+								getDataForLineAndPieChart(data);
+							});
 			});
 		}
 
