@@ -64,6 +64,10 @@
 				var data = transformData(result);
 				var options = getOptions();
 				var myBarChart = new Chart(ctx).Bar(data, options);
+				$('canvas').click(function(evt){
+				    var activeBars = myBarChart.getBarsAtEvent(evt);
+				    console.log(activeBars[0].label);
+				});
 
 			});
 
