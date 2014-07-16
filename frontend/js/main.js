@@ -4,7 +4,7 @@
 	// document ready
 	$(function() {
 		$('#request-link').click(function (e) {
-			$('#vis').html("");
+			//$('#vis').html("");
 			e.preventDefault()
 
 			var startTime = $('#starttime').val();
