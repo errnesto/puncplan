@@ -11,6 +11,7 @@
 			var endTime   = $('#endtime').val();
 
 			var backendUrl = 'http://mysterious-ridge-1941.herokuapp.com/showStat/';
+			var newJsonFileUrl = '/Users/Fee/Documents/Uni/HTW/OD/punctualityplan/frontend/data/sample.json';
 			var data       = {
 				starttime: startTime,
 				endtime:   endTime
@@ -67,6 +68,20 @@
 
 			});
 
+			$.getJSON(newJsonFileUrl,data,function (result) {
+				console.log(result);
+				result.sort(function(a,b) { return parseFloat(a.day) - parseFloat(b.day) } );
+				result.reverse();
+				// createTableFromResult(result);
+				// createDivsFromResult(result);
+				var ctx = $("#lineChart").get(0).getContext("2d");
+				var data = transformDataForLineChart(result);
+				var options = getOptionsForLineChart();
+				var myLineChart = new Chart(ctx).Line(data, options);
+			}).fail(function(error){
+				console.log(error);
+			});
+
 			function getOptions(){
 				var o = {
 				    //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
@@ -101,6 +116,52 @@
 				return o;
 			}
 
+			function getOptionsForLineChart(){
+				var o = {
+				    ///Boolean - Whether grid lines are shown across the chart
+				    scaleShowGridLines : true,
+
+				    //String - Colour of the grid lines
+				    scaleGridLineColor : "rgba(0,0,0,.05)",
+
+				    //Number - Width of the grid lines
+				    scaleGridLineWidth : 1,
+
+				    //Boolean - Whether the line is curved between points
+				    bezierCurve : true,
+
+				    //Number - Tension of the bezier curve between points
+				    bezierCurveTension : 0.4,
+
+				    //Boolean - Whether to show a dot for each point
+				    pointDot : true,
+
+				    //Number - Radius of each point dot in pixels
+				    pointDotRadius : 4,
+
+				    //Number - Pixel width of point dot stroke
+				    pointDotStrokeWidth : 1,
+
+				    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+				    pointHitDetectionRadius : 20,
+
+				    //Boolean - Whether to show a stroke for datasets
+				    datasetStroke : true,
+
+				    //Number - Pixel width of dataset stroke
+				    datasetStrokeWidth : 2,
+
+				    //Boolean - Whether to fill the dataset with a colour
+				    datasetFill : true,
+
+				    //String - A legend template
+				    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].lineColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>"
+
+				};
+				return o;
+
+			}
+
 			function transformData(result){
 				var avgs = [];
 				var labels = [];
@@ -109,22 +170,49 @@
 					labels.push(result[i].vehicle_type + " " + result[i].vehicle_number);
 				}
 				var data = {
-						    labels: labels,
-						    datasets: [
-						        {
-						            label: "My First dataset",
-						            fillColor: "rgba(220,220,220,0.5)",
-						            strokeColor: "rgba(220,220,220,0.8)",
-						            highlightFill: "rgba(220,220,220,0.75)",
-						            highlightStroke: "rgba(220,220,220,1)",
-						            data: avgs
-						        }
-						       ]
-						    };
+					labels: labels,
+					datasets: [
+					{
+						label: "My First dataset",
+						fillColor: "rgba(220,220,220,0.5)",
+						strokeColor: "rgba(220,220,220,0.8)",
+						highlightFill: "rgba(220,220,220,0.75)",
+						highlightStroke: "rgba(220,220,220,1)",
+						data: avgs
+					}
+					]
+				};
 				return data;
 			}
 
 		});
-	});
+
+		function transformDataForLineChart(result){
+			var avgs = [];
+			var days = [];
+			for(var i = 0; i< result.length;i++){
+				avgs.push(result[i].avg);
+				days.push(result[i].day);
+			}
+			var data = {
+				labels: days,
+				datasets: [
+				{
+					label: "My First dataset",
+					fillColor: "rgba(220,220,220,0.2)",
+					strokeColor: "rgba(220,220,220,1)",
+					pointColor: "rgba(220,220,220,1)",
+					pointStrokeColor: "#fff",
+					pointHighlightFill: "#fff",
+					pointHighlightStroke: "rgba(220,220,220,1)",
+					data: avgs
+				}
+				]
+			};
+			return data;
+		};
+
+
+});
 
 })();
