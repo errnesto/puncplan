@@ -3,7 +3,7 @@
 
 	// document ready
 	$(function() {
-		function getDataForLineChart(name){
+		function getDataForLineAndPieChart(name){
 			var a = name.split(" ");
 			var data = {
 				type : a[0],
@@ -11,15 +11,20 @@
 			};
 			var newJsonFileUrl = './data/sample.json';
 			$.getJSON(newJsonFileUrl,function (result) {
-					result.sort(function(a,b) { return parseFloat(a.day) - parseFloat(b.day) } );
-					result.reverse();
-					var ctx = $("#lineChart").get(0).getContext("2d");
-					var data = transformDataForLineChart(result);
-					var options = getOptionsForLineChart();
-					var myLineChart = new Chart(ctx).Line(data, options);
-				}).fail(function(error){
-					console.log(error);
-				});
+				var ctx = $("#lineChart").get(0).getContext("2d");
+				var data = transformDataForLineChart(result);
+				var options = getOptionsForLineChart();
+				var myLineChart = new Chart(ctx).Line(data, options);
+				
+				var pieElement = $("#pieChart").get(0).getContext("2d");
+				var pieData = transformDataForPieChart(result);
+				var pieOptions = getPieChartOptions();
+				console.log(pieData);
+				console.log(pieOptions);
+				var myPieChart = new Chart(pieElement).Pie(pieData,pieOptions);
+			}).fail(function(error){
+				console.log(error);
+			});
 		}
 
 		function getDataForBarChart(backendUrl, data){
@@ -29,13 +34,13 @@
 				// createTableFromResult(result);
 				// createDivsFromResult(result);
 				var ctx = $("#barChart").get(0).getContext("2d");
-				var data = transformData(result);
-				var options = getOptions();
+				var data = transformDataForBarChart(result);
+				var options = getOptionsForBarChart();
 				var myBarChart = new Chart(ctx).Bar(data, options);
 				$('canvas').click(function(evt){
 				    var activeBars = myBarChart.getBarsAtEvent(evt);
 				    $('#barChart').fadeOut("slow", function(){
-				    	getDataForLineChart(activeBars[0].label);
+				    	getDataForLineAndPieChart(activeBars[0].label);
 				    });
 				});
 			});
@@ -59,7 +64,7 @@
 
 		});
 
-		function getOptions(){
+		function getOptionsForBarChart(){
 			var o = {
 			    //Boolean - Whether the scale should start at zero, or an order of magnitude down from the lowest value
 			    scaleBeginAtZero : true,
@@ -139,7 +144,7 @@
 
 		}
 
-		function transformData(result){
+		function transformDataForBarChart(result){
 			var avgs = [];
 			var labels = [];
 			for(var i = 0; i< result.length;i++){
@@ -185,7 +190,58 @@
 				]
 			};
 			return data;
-		};
+		}
+
+		function transformDataForPieChart(result){
+			var colors = ["#F7464A", "#46BFBD", "#FDB45C",  "#2A0A29", "#A9F5F2", "#243B0B", "#FF8000",];
+			var highlights = ["#F77274", "#6CCDCB", "#FFC883", "#724171", "#D4F8F7", "#5E7742", "#FFB366"];
+			var data = [];
+			for(var i = 0; i< result.length;i++){
+				var entry = {
+					value : result[i].avg,
+					label: result[i].day,
+					color : colors[i],
+					highlight : highlights[i]
+				};
+				data.push(entry);
+			}
+
+			return data;
+		}
+
+		function getPieChartOptions(){
+				var o = {
+			    //Boolean - Whether we should show a stroke on each segment
+			    segmentShowStroke : true,
+
+			    //String - The colour of each segment stroke
+			    segmentStrokeColor : "#fff",
+
+			    //Number - The width of each segment stroke
+			    segmentStrokeWidth : 2,
+
+			    //Number - The percentage of the chart that we cut out of the middle
+			    percentageInnerCutout : 50, // This is 0 for Pie charts
+
+			    //Number - Amount of animation steps
+			    animationSteps : 100,
+
+			    //String - Animation easing effect
+			    animationEasing : "easeOutBounce",
+
+			    //Boolean - Whether we animate the rotation of the Doughnut
+			    animateRotate : true,
+
+			    //Boolean - Whether we animate scaling the Doughnut from the centre
+			    animateScale : false,
+
+			    //String - A legend template
+			    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+
+			};
+
+			return o;
+		}
 
 
 });
