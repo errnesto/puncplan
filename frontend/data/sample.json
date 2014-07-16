@@ -1,0 +1,44 @@
+[
+  {
+    "avg": 5,
+    "id": null,
+    "day" : "Monday",
+    "date" : "2014-05-01"
+  },
+  {
+    "avg": 2,
+    "id": null,
+    "day" : "Tuesday",
+    "date" : "2014-05-02"
+  },
+  {
+    "avg": 8,
+    "id": null,
+    "day" : "Wednesday",
+    "date" : "2014-05-03"
+  },
+  {
+    "avg": 1,
+    "id": null,
+    "day" : "Thursday",
+    "date" : "2014-05-04"
+  },
+  {
+    "avg": 7,
+    "id": null,
+    "day" : "Friday",
+    "date" : "2014-05-05"
+  },
+  {
+    "avg": 2,
+    "id": null,
+    "day" : "Saturday",
+    "date" : "2014-05-06"
+  },
+  {
+    "avg": 12,
+    "id": null,
+    "day" : "Sunday",
+    "date" : "2014-05-07"
+  }
+]
