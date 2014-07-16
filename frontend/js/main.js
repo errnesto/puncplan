@@ -9,12 +9,11 @@
 				type : a[0],
 				num : a[1]
 			};
-			// var newJsonFileUrl = './data/sample.json';
-			var newJsonFileUrl = 'C:/Users/anna/Documents/Uni/5.%20Semester/Open%20Data/punctualityplan/frontend/data/sample.json';
+			var newJsonFileUrl = './data/sample.json';
 			$.getJSON(newJsonFileUrl,function (result) {
 					result.sort(function(a,b) { return parseFloat(a.day) - parseFloat(b.day) } );
 					result.reverse();
-					var ctx = $("#myChart").get(0).getContext("2d");
+					var ctx = $("#lineChart").get(0).getContext("2d");
 					var data = transformDataForLineChart(result);
 					var options = getOptionsForLineChart();
 					var myLineChart = new Chart(ctx).Line(data, options);
@@ -29,14 +28,15 @@
 				result.reverse();
 				// createTableFromResult(result);
 				// createDivsFromResult(result);
-				var ctx = $("#myChart").get(0).getContext("2d");
+				var ctx = $("#barChart").get(0).getContext("2d");
 				var data = transformData(result);
 				var options = getOptions();
 				var myBarChart = new Chart(ctx).Bar(data, options);
 				$('canvas').click(function(evt){
 				    var activeBars = myBarChart.getBarsAtEvent(evt);
-				    myBarChart.removeData();
-				    getDataForLineChart(activeBars[0].label);
+				    $('#barChart').fadeOut("slow", function(){
+				    	getDataForLineChart(activeBars[0].label);
+				    });
 				});
 			});
 		}
