@@ -44,8 +44,6 @@
 		}
 
 		function createDropdown(result){
-			var labelBus = "<label for='bus'>Busse</label>";
-			var labelTram = "<label for='tram'>Trams</label>";
 			var selectBus = $('<select/>',{id: "bus"});
 			var selectTram = $('<select/>',{id: "tram"});
 			for(var i=0;i<result.length;i++){
@@ -58,15 +56,19 @@
 					selectTram.append(o);
 				}
 			}
-			$('#header').append(labelBus)
-						.append(selectBus)
-						.append(labelTram)
-						.append(selectTram);
-			
-			$('#tram').val(''); 
+
+			var bus = $('<label/>',{
+				for: "bus",
+				text: "Busse"
+			}).append(selectBus);
+
+			var tram = $('<label/>',{
+				for: "tram",
+				text: "Trams"
+			}).append(selectTram);
 
 			$('#bus')
-						.val('')
+						.html(bus)
 						.change(function(){
 							var data = {
 								type : "Bus",
@@ -78,7 +80,7 @@
 			});
 
 			$('#tram')
-						.val('')
+						.html(tram)
 						.change(function(){
 							var data = {
 								type : "Tram",
@@ -94,8 +96,8 @@
 			//$('#vis').html("");
 			e.preventDefault()
 
-			var startTime = $('#starttime').val();
-			var endTime   = $('#endtime').val();
+			var startTime = $('#from').val();
+			var endTime   = $('#to').val();
 
 			var backendUrl = 'http://mysterious-ridge-1941.herokuapp.com/showStat/';
 			
@@ -287,7 +289,29 @@
 			return o;
 		}
 
-
+		$( "#from" ).datepicker({
+	      defaultDate: "-1w",
+	      changeMonth: true,
+	      numberOfMonths: 1,
+	      maxDate: 0,
+	      dateFormat: "yymmdd",
+	      onClose: function( selectedDate ) {
+	        $( "#to" ).datepicker( "option", "minDate", selectedDate );
+	      },
+	      onChange: function(){
+	      	console.log(this);
+	      }
+	    });
+	    $( "#to" ).datepicker({
+	      defaultDate: "-7D",
+	      changeMonth: true,
+	      numberOfMonths: 1,
+	      maxDate: 0,
+	      dateFormat: "yymmdd",
+	      onClose: function( selectedDate ) {
+	        $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+	      }
+	    });
 });
 
 })();
