@@ -14,3 +14,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+pp_backup1
+pp_backup2
+pp_backup3
