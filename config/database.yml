@@ -5,6 +5,7 @@ common: &common
   username: stefankeil
   password: 
 
+
 development:
   <<: *common
   database: pp_development
@@ -19,4 +20,4 @@ test:
 
 production:
   <<: *common
-  database: pp_test_production
+  database: pp_production

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Open Data</title>
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+    </head>
+    
+    <body>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+        <div id="nav">
+            <img class="logo" src="logo.png" style="width: 40px;"/>
+            <span class="title">Open Data</span>
+
+            <div id="search">
+                <form class="date">
+                    <input id="dateStart" type="text" value="20140501">
+                     <input id="dateEnd" type="text" value="20140502">
+                    <button id="submit">Search</button>
+                </form>
+            </div>      
+        </div>
+
+        <script>
+           (function(){
+                "use strict";
+
+                // document ready
+                $(function() {
+                    $('#submit').click(function (e) {
+                        e.preventDefault()
+
+                        var dateStart = $('#dateStart').val();
+                        var dateEnd   = $('#dateEnd').val();
+
+                        var backendUrl = 'http://mysterious-ridge-1941.herokuapp.com/showStat/';
+                        var data       = {
+                            starttime: dateStart,
+                            endtime:   dateEnd
+                        }
+
+                        $.getJSON(backendUrl,data,function (result) {
+                            console.log(result);
+                            init(result);
+                        });
+                    });
+                });
+                function init(result){
+                result.sort(function(a,b) { return parseFloat(a.avg) - parseFloat(b.avg) } );
+                result.reverse();
+                console.log(result);
+
+                var table = "<table>";
+                for(var i = 0; i<result.length;i++){
+                    table+= "<tr>";
+                    table+= "<td>" + result[i].vehicle_type + "</td>";
+                    table+= "<td>" + result[i].vehicle_number + "</td>";
+                    table+= "<td>" + Math.round(result[i].avg) + " min</td>";
+                    table+= "</tr>";
+                }
+                table += "</table>";
+                $('body').append(table);
+            }
+            })();
+            
+        </script>
+
+    </body>
+</html>

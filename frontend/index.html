@@ -3,17 +3,32 @@
 <head>
 	<title>punctuality plan</title>
 	<script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+	  <script src="https://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
 	<script src="js/main.js"></script>
+	<script src="lib/Chart.min.js"></script>
+	<script src="lib/spin.min.js"></script>
+	<link href="css/style.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+  
+
 </head>
 <body>
 	<h1>Example request</h1>
-
-	<form>
-		<p>start Datum <input id="starttime" name="starttime" type="text" value="20140501" /></p>
-		<p>end Datum <input id="endtime" name="endtime" type="text" value="20140502" /></p>
-	</form>
-
-	<a href="#" id="request-link">test abfrbage</a>
+	<div id="header">
+		<label for="from">From</label>
+		<input type="text" id="from" name="from" value="20140501">
+		<label for="to">to</label>
+		<input type="text" id="to" name="to" value="20140502">
+		<a href="#" id="request-link">test abfrage</a>
+		<div id="bus"></div>
+		<div id="tram"></div>
+	</div>
+	<div id="sp"></div>
+	<div id="vis">
+		<canvas id="barChart" width="400" height="400"></canvas>
+		<canvas id="lineChart" width="400" height="400"></canvas>
+		<canvas id="pieChart" width="400" height="400"></canvas>
+	</div>
 
 </body>
 </html>

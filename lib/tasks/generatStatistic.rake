@@ -78,6 +78,9 @@ namespace :generateStatistic do
                     			direction:      trip.trip_headsign, 
                     			vehicle_type:   vehicle_type, 
                     			vehicle_number: route.route_short_name)
+
+                            puts '----'
+                            puts tt_departures.length
  
                             unless tt_departures.empty?
                         		#get departues with shortest delay
@@ -100,12 +103,14 @@ namespace :generateStatistic do
 
                         		#prevent against time jumping in time tables
                         		if closest_departure_obj.created_at == nd_closest_departure_obj.created_at
-                        			actual_departure = closest_departure
+                        			actual_delay = closest_departure
                         		else
-                        			actual_departure = nd_closest_departure
+                        			actual_delay = nd_closest_departure
                         		end
 
-                        		average_delay += actual_departure
+                                puts actual_delay
+
+                        		average_delay += actual_delay
                             else
                                 average_delay += DELAY_RANGE * 2 #no departure at all or a very big delay
                             end
