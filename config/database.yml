@@ -3,7 +3,7 @@ common: &common
   encoding: unicode
   pool: 5
   username: stefankeil
-  password:
+  password: 
 
 development:
   <<: *common
@@ -19,4 +19,4 @@ test:
 
 production:
   <<: *common
-  database: pp_development
+  database: pp_test_production
