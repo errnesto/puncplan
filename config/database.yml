@@ -2,8 +2,9 @@ common: &common
   adapter: postgresql
   encoding: unicode
   pool: 5
-  username: Ernesto
-  password:
+  username: stefankeil
+  password: 
+
 
 development:
   <<: *common
@@ -19,4 +20,4 @@ test:
 
 production:
   <<: *common
-  database: pp_development
+  database: pp_production
