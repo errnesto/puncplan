@@ -1,6 +1,7 @@
 PunctualityPlan::Application.routes.draw do
   resources :statistics
-  get '/showStat', to: 'statistics#showStat'
+  get '/allLines', to: 'statistics#allLines'
+  get '/oneLine', to: 'statistics#oneLine'
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
