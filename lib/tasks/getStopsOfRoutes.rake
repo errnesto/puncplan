@@ -7,7 +7,7 @@ include ERB::Util
 namespace :delay do
     desc 'get the number of stops each roue has today'
     task :getRouteStops => :environment do
-        puts 'hallo'
+        puts 'update stop times'
         date      = Date.today 
         gtfs_date = date.strftime("%Y%m%d")
 

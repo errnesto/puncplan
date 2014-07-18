@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140717120450) do
+ActiveRecord::Schema.define(version: 20140717172125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 20140717120450) do
 
   create_table "statistics", force: true do |t|
     t.date     "date"
-    t.float    "average_delay"
+    t.float    "average_delay",  default: 0.0
     t.string   "vehicle_type"
     t.string   "vehicle_number"
     t.datetime "created_at"
