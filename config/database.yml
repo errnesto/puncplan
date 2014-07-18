@@ -1,10 +1,7 @@
 common: &common
   adapter: postgresql
   encoding: unicode
-  pool: 5
-  username: stefankeil
-  password: 
-
+  pool: 5 
 
 development:
   <<: *common
@@ -21,3 +18,6 @@ test:
 production:
   <<: *common
   database: pp_production
+  username: admin
+  password: 'fuwh3ny9thil'
+ # host:     '/home/puncplan/tmp/' 
