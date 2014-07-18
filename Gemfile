@@ -44,3 +44,5 @@ gem 'haml'
 # gem 'debugger', group: [:development, :test]
 gem 'fcgi'
 gem 'whenever', :require => false
+gem 'therubyracer'
+gem 'execjs'
