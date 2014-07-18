@@ -42,7 +42,9 @@ gem 'haml'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-gem 'fcgi'
-gem 'whenever', :require => false
-gem 'therubyracer'
-gem 'execjs'
+group :production do
+	gem 'fcgi'
+	gem 'whenever', :require => false
+	gem 'therubyracer'
+	gem 'execjs'
+end
