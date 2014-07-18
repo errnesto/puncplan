@@ -1,6 +1,4 @@
 class StatisticsController < ApplicationController
-    def index
-    end
 
     def allLines
       starttime = params['starttime']
