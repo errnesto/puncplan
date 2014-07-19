@@ -5,17 +5,19 @@
 	$(function() {
 		var s= 0;
 		function getDataForLineAndPieChart(data){
-			var newJsonFileUrl = 'https://puncplan.canopus.uberspace.de/fcgi-bin/punctualityplan/allLines';
-			$.getJSON(newJsonFileUrl,function (result) {
-				var ctx = $("#lineChart").get(0).getContext("2d");
-				var data = transformDataForLineChart(result);
-				var options = getOptionsForLineChart();
-				var myLineChart = new Chart(ctx).Line(data, options);
+			console.log(data);
+			var newJsonFileUrl = 'https://puncplan.canopus.uberspace.de/fcgi-bin/punctualityplan/oneLine';
+			$.getJSON(newJsonFileUrl, data, function (result) {
+				var lineElement = $("#lineChart").get(0).getContext("2d");
+				var lineData = transformDataForLineChart(result);
+				var lineOptions = getOptionsForLineChart();
+				var myLineChart = new Chart(lineElement).Line(lineData, lineOptions);
 				
 				var pieElement = $("#pieChart").get(0).getContext("2d");
 				var pieData = transformDataForPieChart(result);
 				var pieOptions = getPieChartOptions();
 				var myPieChart = new Chart(pieElement).Pie(pieData,pieOptions);
+				$('h1').text(data.vehicle_type + " " + data.vehicle_number);
 				s.stop();
 			}).fail(function(error){
 				console.log(error);
@@ -39,8 +41,10 @@
 				    	createSpinner();
 				    	var a = activeBars[0].label.split(" ");
 						var data = {
-							type : a[0],
-							num : a[1]
+							starttime : $('#from').val(),
+							endtime   : $('#to').val(),
+							vehicle_type : a[0],
+							vehicle_number : a[1]
 						};
 				    	getDataForLineAndPieChart(data);
 				    });
@@ -218,12 +222,19 @@
 			return data;
 		}
 
+		function getDay(date){
+			var day = new Date(date);
+			var weekday = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+			return weekday[day.getDay()];
+		}
+
 		function transformDataForLineChart(result){
 			var avgs = [];
 			var days = [];
 			for(var i = 0; i< result.length;i++){
 				avgs.push(result[i].avg);
-				days.push(result[i].day);
+				var day = getDay(result[i].date);
+				days.push(day);
 			}
 			var data = {
 				labels: days,
