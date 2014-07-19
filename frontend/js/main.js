@@ -5,7 +5,7 @@
 	$(function() {
 		var s= 0;
 		function getDataForLineAndPieChart(data){
-			var newJsonFileUrl = './data/sample.json';
+			var newJsonFileUrl = 'https://puncplan.canopus.uberspace.de/fcgi-bin/punctualityplan/allLines';
 			$.getJSON(newJsonFileUrl,function (result) {
 				var ctx = $("#lineChart").get(0).getContext("2d");
 				var data = transformDataForLineChart(result);
