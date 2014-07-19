@@ -11,7 +11,7 @@ namespace :delay do
     	date      = Date.today 
     	gtfs_date = date.strftime("%Y%m%d")
 
-    	unless date == StopCount.first.updated_at.to_date
+    	if StopCount.first == nil || date != StopCount.first.updated_at.to_date
     		Rake::Task['delay:getRouteStops'].invoke
     	end
 
