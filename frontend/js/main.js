@@ -104,7 +104,7 @@
 			var startTime = $('#from').val();
 			var endTime   = $('#to').val();
 
-			var backendUrl = 'http://mysterious-ridge-1941.herokuapp.com/showStat/';
+			var backendUrl = 'https://puncplan.canopus.uberspace.de/fcgi-bin/punctualityplan/allLines';
 			
 			var data       = {
 				starttime: startTime,
