@@ -67,8 +67,8 @@
 		}
 
 		function createDropdown(result){
-			var selectBus = $('<select/>',{id: "bus"});
-			var selectTram = $('<select/>',{id: "tram"});
+			var selectBus = $('<select/>',{id: "bus", class:"form-control"});
+			var selectTram = $('<select/>',{id: "tram", class:"form-control"});
 			for(var i=0;i<result.length;i++){
 				var o = $('<option/>', {
 					text: result[i].vehicle_number
@@ -82,7 +82,8 @@
 
 			var bus = $('<label/>',{
 				for: "bus",
-				text: "Busse"
+				text: "Busse",
+				class: "col-sm-2 control-label"
 			}).append(selectBus);
 
 			var tram = $('<label/>',{
@@ -97,7 +98,7 @@
 								starttime : $('#from').val(),
 								endtime   : $('#to').val(),
 								vehicle_type : "Bus",
-								vehicle_number : $('#bus :selected').text()
+								vehicle_number : $('#bus :selected').text(),
 							};
 							$('#barChart').fadeOut("slow", function(){
 								getDataForLineAndPieChart(data);
