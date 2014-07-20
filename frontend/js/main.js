@@ -5,38 +5,52 @@
 	$(function() {
 		var s= 0;
 		function getDataForLineAndPieChart(data){
-			console.log(data);
 			var newJsonFileUrl = 'https://puncplan.canopus.uberspace.de/fcgi-bin/punctualityplan/oneLine';
 			$.getJSON(newJsonFileUrl, data, function (result) {
 				var lineElement = $("#lineChart").get(0).getContext("2d");
+				if(lineChart){
+					lineElement.clearRect(0,0,400,400);
+				}
 				var lineData = transformDataForLineChart(result);
 				var lineOptions = getOptionsForLineChart();
-				var myLineChart = new Chart(lineElement).Line(lineData, lineOptions);
+				var lineChart = new Chart(lineElement).Line(lineData, lineOptions);
+				$('#lineChart').show();
 				
 				var pieElement = $("#pieChart").get(0).getContext("2d");
+				if(pieElement){
+					pieElement.clearRect(0,0,400,400);
+				}
 				var pieData = transformDataForPieChart(result);
 				var pieOptions = getPieChartOptions();
-				var myPieChart = new Chart(pieElement).Pie(pieData,pieOptions);
+				var pieChart = new Chart(pieElement).Pie(pieData,pieOptions);
+				$('#pieChart').show();
 				$('h1').text(data.vehicle_type + " " + data.vehicle_number);
 				s.stop();
+				$('#back').show();
 			}).fail(function(error){
 				console.log(error);
 			});
 		}
 
-		function getDataForBarChart(backendUrl, data){
+		function getDataForBarChart(){
+			var data       = {
+				starttime: $('#from').val(),
+				endtime:   $('#to').val()
+			}
+			var backendUrl = 'https://puncplan.canopus.uberspace.de/fcgi-bin/punctualityplan/allLines';
 			$.getJSON(backendUrl,data,function (result) {
+				$('h1').text("Overview");
 				result.sort(function(a,b) { return parseFloat(a.avg) - parseFloat(b.avg) } );
 				result.reverse();
 				createDropdown(result);
 				var ctx = $("#barChart").get(0).getContext("2d");
 				var data = transformDataForBarChart(result);
 				var options = getOptionsForBarChart();
-				var myBarChart = new Chart(ctx).Bar(data, options);
+				var barChart = new Chart(ctx).Bar(data, options);
 
 				s.stop();
 				$('canvas').click(function(evt){
-				    var activeBars = myBarChart.getBarsAtEvent(evt);
+				    var activeBars = barChart.getBarsAtEvent(evt);
 				    $('#barChart').fadeOut("slow", function(){
 				    	createSpinner();
 				    	var a = activeBars[0].label.split(" ");
@@ -80,8 +94,10 @@
 						.html(bus)
 						.change(function(){
 							var data = {
-								type : "Bus",
-								num : this.value
+								starttime : $('#from').val(),
+								endtime   : $('#to').val(),
+								vehicle_type : "Bus",
+								vehicle_number : $('#bus :selected').text()
 							};
 							$('#barChart').fadeOut("slow", function(){
 								getDataForLineAndPieChart(data);
@@ -92,8 +108,10 @@
 						.html(tram)
 						.change(function(){
 							var data = {
-								type : "Tram",
-								num : this.value
+								starttime : $('#from').val(),
+								endtime   : $('#to').val(),
+								vehicle_type : "Tram",
+								vehicle_number : $('#tram :selected').text()
 							};
 							 $('#barChart').fadeOut("slow", function(){
 								getDataForLineAndPieChart(data);
@@ -105,18 +123,17 @@
 			//$('#vis').html("");
 			e.preventDefault();
 			createSpinner();
-			var startTime = $('#from').val();
-			var endTime   = $('#to').val();
+			getDataForBarChart();
 
-			var backendUrl = 'https://puncplan.canopus.uberspace.de/fcgi-bin/punctualityplan/allLines';
-			
-			var data       = {
-				starttime: startTime,
-				endtime:   endTime
-			}
+		});
 
-			getDataForBarChart(backendUrl, data);
-
+		$('#back').click(function(){
+			$('#pieChart').fadeOut("slow");
+			$('#lineChart').fadeOut("slow", function(){
+				$('#barChart').show();
+				$('#back').hide();
+				$('h1').text("Overview");
+			});
 		});
 
 		function getOptionsForBarChart(){
@@ -203,7 +220,7 @@
 			var avgs = [];
 			var labels = [];
 			for(var i = 0; i< result.length;i++){
-				avgs.push(result[i].avg);
+				avgs.push(Math.round(result[i].avg*100) / 100);
 				labels.push(result[i].vehicle_type + " " + result[i].vehicle_number);
 			}
 			var data = {
@@ -232,7 +249,7 @@
 			var avgs = [];
 			var days = [];
 			for(var i = 0; i< result.length;i++){
-				avgs.push(result[i].avg);
+				avgs.push(Math.round(result[i].avg*100) / 100);
 				var day = getDay(result[i].date);
 				days.push(day);
 			}
@@ -260,7 +277,7 @@
 			var data = [];
 			for(var i = 0; i< result.length;i++){
 				var entry = {
-					value : result[i].avg,
+					value : Math.round(result[i].avg*100) / 100,
 					label: result[i].day,
 					color : colors[i],
 					highlight : highlights[i]
@@ -328,28 +345,28 @@
 		}
 
 		$( "#from" ).datepicker({
-	      defaultDate: "-1w",
-	      changeMonth: true,
-	      numberOfMonths: 1,
-	      maxDate: 0,
-	      dateFormat: "yymmdd",
-	      onClose: function( selectedDate ) {
-	        $( "#to" ).datepicker( "option", "minDate", selectedDate );
-	      },
-	      onChange: function(){
-	      	console.log(this);
-	      }
-	    });
-	    $( "#to" ).datepicker({
-	      defaultDate: "-7D",
-	      changeMonth: true,
-	      numberOfMonths: 1,
-	      maxDate: 0,
-	      dateFormat: "yymmdd",
-	      onClose: function( selectedDate ) {
-	        $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-	      }
-	    });
-});
+		      defaultDate: "-1w",
+		      changeMonth: true,
+		      numberOfMonths: 1,
+		      maxDate: 0,
+		      dateFormat: "yymmdd",
+		      onClose: function( selectedDate ) {
+		        $( "#to" ).datepicker( "option", "minDate", selectedDate );
+		      },
+		      onChange: function(){
+		      	console.log(this);
+		      }
+		});
+		$( "#to" ).datepicker({
+		      defaultDate: "-7D",
+		      changeMonth: true,
+		      numberOfMonths: 1,
+		      maxDate: 0,
+		      dateFormat: "yymmdd",
+		      onClose: function( selectedDate ) {
+		        $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+		      }
+		});
+	});
 
 })();

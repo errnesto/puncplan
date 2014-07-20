@@ -5,3 +5,7 @@
     display: table-cell;
     vertical-align: middle
 }
+
+#back {
+	display: none;
+}
