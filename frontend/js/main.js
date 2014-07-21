@@ -71,7 +71,11 @@
 
 		function createDropdown(result){
 			var selectBus = $('<select/>',{id: "bus", class:"form-control"});
+			var placeHolderBus = $('<option/>', {text: "Select Bus"});
 			var selectTram = $('<select/>',{id: "tram", class:"form-control"});
+			var placeHolderTram = $('<option/>', {text: "Select Tram"});
+			selectBus.append(placeHolderBus);
+			selectTram.append(placeHolderTram);
 			for(var i=0;i<result.length;i++){
 				var o = $('<option/>', {
 					text: result[i].vehicle_number
