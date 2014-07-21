@@ -85,7 +85,7 @@
 
 			var bus = $('<label/>',{
 				for: "bus",
-				text: "Busse",
+				text: "Buses",
 				class: "col-sm-2 control-label"
 			}).append(selectBus);
 
