@@ -14,9 +14,8 @@
 
 </head>
 <body>
-	<h1>Bussen und Trams</h1>
 	<div id="header">
-
+		<h1>Bussen und Trams</h1>
 		<form class="form-inline" role="form">
 		  <div class="form-group">
 		    <label class="sr-only" for="from">From</label>
@@ -34,10 +33,10 @@
 	</div>
 	<div id="sp"></div>
 	<div id="vis">
+		<canvas id="barChart" class="chart" width="800" height="600"></canvas>
+		<canvas id="lineChart" class="chart" width="600" height="400"></canvas>
+		<canvas id="pieChart" class="chart" width="400" height="400"></canvas>
 		<button type="button" id="back">Back To BarChart</button>
-		<canvas id="barChart" width="400" height="400"></canvas>
-		<canvas id="lineChart" width="400" height="400"></canvas>
-		<canvas id="pieChart" width="400" height="400"></canvas>
 	</div>
 
 </body>

@@ -49,6 +49,9 @@
 				var barChart = new Chart(ctx).Bar(data, options);
 
 				s.stop();
+
+				document.getElementById('vis').scrollIntoView();
+
 				$('canvas').click(function(evt){
 				    var activeBars = barChart.getBarsAtEvent(evt);
 				    $('#barChart').fadeOut("slow", function(){
@@ -125,7 +128,6 @@
 			e.preventDefault();
 			createSpinner();
 			getDataForBarChart();
-
 		});
 
 		$('#back').click(function(){
@@ -134,7 +136,9 @@
 				$('#barChart').show();
 				$('#back').hide();
 				$('h1').text("Overview");
+				document.getElementById('vis').scrollIntoView();
 			});
+
 		});
 
 		function getOptionsForBarChart(){

@@ -10,3 +10,28 @@
 	display: none;
 }
 
+#bus {
+	margin: 5px 5px 5px 0px;
+}
+
+#tram {
+	margin: 5px 5px 5px 0px;
+}
+
+#vis {
+	padding: 10px;
+}
+
+.chart {
+	margin-left: 10px;
+}
+
+#header {
+	margin-bottom: 2%;
+	margin-left: 15px;
+}
+
+.col-sm-2.control-label {
+	padding-left: 0px;
+}
+
