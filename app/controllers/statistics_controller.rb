@@ -15,7 +15,7 @@ class StatisticsController < ApplicationController
       vehicle_number = params['vehicle_number']
       vehicle_type = params['vehicle_type']
 
-      @statistics = Statistic.select("date, avg(average_delay)").where(date: starttime..endtime, vehicle_number: vehicle_number, vehicle_type: vehicle_type).group("date")
+      @statistics = Statistic.select("date, average_delay").where(date: starttime..endtime, vehicle_number: vehicle_number, vehicle_type: vehicle_type)
 
       render json: @statistics
     end

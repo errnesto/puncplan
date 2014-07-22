@@ -36,6 +36,7 @@
 			for(var i = 0; i< result.length;i++){
 				var label = result[i].avg
 				avgs.push(label);
+
 				labels.push(result[i].vehicle_type + " " + result[i].vehicle_number);
 			}
 			var data = {
@@ -62,6 +63,7 @@
 			var days = [];
 			for(var i = 0; i< result.length;i++){
 				avgs.push(Math.round(result[i].avg*100)/100);
+
 				var day = getDay(result[i].date);
 				days.push(day);
 			}
@@ -81,7 +83,6 @@
 			};
 			return data;
 		}
-
 
 		var setupBarChart = function (result) {
 
