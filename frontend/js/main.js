@@ -62,11 +62,12 @@
 			var avgs = [];
 			var days = [];
 			for(var i = 0; i< result.length;i++){
-				avgs.push(Math.round(result[i].avg*100)/100);
+				avgs.push(Math.round(result[i].average_delay*100)/100);
 
 				var day = getDay(result[i].date);
 				days.push(day);
 			}
+
 			var data = {
 				labels: days,
 				datasets: [
@@ -133,8 +134,6 @@
 		};
 
 		var setupLineChart = function (result) {
-			result.sort(function(a,b) { return parseFloat(a.avg) - parseFloat(b.avg) } );
-			result.reverse();
 
 			var options = {
 				scaleLabel: " <%=value%> min",
@@ -143,6 +142,8 @@
 			};
 
 			var data   = transformDataForLineChart(result);
+						console.log(data);
+
 			var ctx = $("#lineChart").get(0).getContext("2d");
 			var barChart = new Chart(ctx).Line(data,options);
 		};
@@ -160,7 +161,6 @@
 			var backendUrl = 'https://puncplan.canopus.uberspace.de/fcgi-bin/punctualityplan/' + endpoint;
 
 			$.getJSON(backendUrl,data,function (result) {
-
 				if (endpoint == 'allLines') {
 					setupBarChart(result);
 				} else {
