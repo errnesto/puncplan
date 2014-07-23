@@ -141,10 +141,8 @@
 				scaleShowGridLines: false
 			};
 
-			var data   = transformDataForLineChart(result);
-						console.log(data);
-
-			var ctx = $("#lineChart").get(0).getContext("2d");
+			var data     = transformDataForLineChart(result);
+			var ctx      = $("#lineChart").get(0).getContext("2d");
 			var barChart = new Chart(ctx).Line(data,options);
 		};
 
@@ -152,7 +150,7 @@
 			var from = from || formatDate(firstPossibleDate);
 			var to   = to || formatDate(new Date());
 
-			var data       = {
+			var data = {
 				starttime:      from,
 				endtime:        to,
 				vehicle_type:   vehicle_type,

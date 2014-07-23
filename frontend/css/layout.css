@@ -4,9 +4,13 @@ body {
 	background-image: url(../img/plan.jpg);
 	background-size: cover;
 	background-repeat: no-repeat;
+	overflow: hidden;
 }
 a {
 	text-decoration: none;
+}
+.all {
+	overflow: hidden;
 }
 .title {
 	font-family: sans-serif;

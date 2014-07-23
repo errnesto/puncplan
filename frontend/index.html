@@ -9,32 +9,31 @@
 
 </head>
 <body>
-	<a href="./"><h1 class="title">punctualitiy <span class="red">plan</span></h1></a>
-	<div id="content">
-		<form class="form-inline" role="form">
-		<div class="input-wrapper">
-		  <input type="text" class="form-input" id="from" placeholder="insert start date">
+	<div class="all">
+		<a href="./"><h1 class="title">punctualitiy <span class="red">plan</span></h1></a>
+		<div id="content">
+			<form class="form-inline" role="form">
+			<div class="input-wrapper">
+			  <input type="text" class="form-input" id="from" placeholder="insert start date">
+			</div>
+			<div class="input-wrapper">
+			  <input type="text" class="form-input" id="to" placeholder="insert end date">
+			</div>
+			</form>
+			<input type="submit" id="submit-btn" value="get delays">
 		</div>
-		<div class="input-wrapper">
-		  <input type="text" class="form-input" id="to" placeholder="insert end date">
-		</div>
-		</form>
-		<input type="submit" id="submit-btn" value="get delays">
-	</div>
-	<div id="bus"></div>
 
-	
+		<div id="bus"></div>
 
-	</div>
-	<div id="sp"></div>
-	<div id="vis">
-		<div class="chart-wrapper">
-			<h2 class="subtitle">All Lines Average delay</h2>
-			<canvas id="barChart" class="chart" width="700" height="600"></canvas>
-		</div>
-		<div class="chart-wrapper">
-			<h2  id="oneLineTitle" class="subtitle"></h2>
-			<canvas id="lineChart" class="chart" width="700" height="530"></canvas>
+		<div id="vis">
+			<div class="chart-wrapper">
+				<h2 class="subtitle">All Lines Average delay</h2>
+				<canvas id="barChart" class="chart" width="700" height="600"></canvas>
+			</div>
+			<div class="chart-wrapper">
+				<h2  id="oneLineTitle" class="subtitle"></h2>
+				<canvas id="lineChart" class="chart" width="700" height="530"></canvas>
+			</div>
 		</div>
 	</div>
 
