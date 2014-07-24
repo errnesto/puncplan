@@ -5,6 +5,8 @@
 	$(function() {
 
 		var firstPossibleDate = new Date(2014,6,19);
+		var lastPossibleDate = new Date();
+		lastPossibleDate.setDate(lastPossibleDate.getDate() - 1); //yesterday
 
 		Chart.defaults.global.scaleFontFamily  = "'pt Mono', sans-serif";
 		Chart.defaults.global.scaleOverride    = true;
@@ -19,6 +21,11 @@
 			var day   = dateObj.getDate();
 
 			return year+'-'+month+'-'+day;
+		};
+		var formatHumanDate = function (dbDateString) {
+			var date = dbDateString.split('-');
+
+			return date[2]+'.'+date[1]+'.'+date[0];
 		};
 
 		var getDay = function (date){
@@ -148,7 +155,7 @@
 
 		var getDelays = function (from, to, endpoint, vehicle_type, vehicle_number){
 			var from = from || formatDate(firstPossibleDate);
-			var to   = to || formatDate(new Date());
+			var to   = to || formatDate(lastPossibleDate);
 
 			var data = {
 				starttime:      from,
@@ -160,6 +167,7 @@
 
 			$.getJSON(backendUrl,data,function (result) {
 				if (endpoint == 'allLines') {
+					$('#allLinesTitle').text(formatHumanDate(from) + ' - ' + formatHumanDate(to));
 					setupBarChart(result);
 				} else {
 					setupLineChart(result);
@@ -170,7 +178,7 @@
 		//datepicker
 		var datepicker_options = {
 			min: firstPossibleDate,
-			max: true,
+			max: lastPossibleDate,
 			format: 'yyyy-mm-dd'
 		}
 
